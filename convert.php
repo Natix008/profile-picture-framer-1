@@ -5,35 +5,40 @@
  * @param  int    $design     Frame to use
  * @return binary             Binary data of framed profile picture
  */
-function makeDP($sourcePath, $design = 0){
-  if(in_array($design, array(0, 1, 2)))
-    $design = "frame-$design.png";
-  else
-    exit;
+function makeDP($sourcePath, $design = 0) {
+  if (!in_array($design, array(0, 1, 2))) exit;
 
+  $designPath = __DIR__ . "/frames/frame-$design.png";
+
+  // Load user image
   $src = imagecreatefromstring(file_get_contents($sourcePath));
-  $fg = imagecreatefrompng(__DIR__ . "/frames/$design");
+  list($srcWidth, $srcHeight) = getimagesize($sourcePath);
 
-  list($width, $height) = getimagesize($sourcePath);
+  // Crop user image to a square (center crop)
+  $size = min($srcWidth, $srcHeight);
+  $srcX = ($srcWidth - $size) / 2;
+  $srcY = ($srcHeight - $size) / 2;
+  $cropped = imagecreatetruecolor(1080, 1080);
+  imagecopyresampled($cropped, $src, 0, 0, $srcX, $srcY, 1080, 1080, $size, $size);
 
-  $croppedFG = imagecreatetruecolor($width, $height);
+  // Load and resize frame to 1080x1080
+  $fg = imagecreatefrompng($designPath);
+  $resizedFG = imagecreatetruecolor(1080, 1080);
 
-  $background = imagecolorallocate($croppedFG, 0, 0, 0);
-  // removing the black from the placeholder
-  imagecolortransparent($croppedFG, $background);
+  imagealphablending($resizedFG, false);
+  imagesavealpha($resizedFG, true);
 
-  imagealphablending($croppedFG, false);
-  imagesavealpha($croppedFG, true);
+  imagecopyresampled($resizedFG, $fg, 0, 0, 0, 0, 1080, 1080, imagesx($fg), imagesy($fg));
 
-  imagecopyresized($croppedFG, $fg, 0, 0, 0, 0, $width, $height, 400, 400);
+  // Merge cropped photo with frame
+  $final = imagecreatetruecolor(1080, 1080);
+  imagecopy($final, $cropped, 0, 0, 0, 0, 1080, 1080);
+  imagecopy($final, $resizedFG, 0, 0, 0, 0, 1080, 1080);
 
-  // Start merging
-  $out = imagecreatetruecolor($width, $height);
-  imagecopyresampled($out, $src, 0, 0, 0, 0, $width, $height, $width, $height);
-  imagecopyresampled($out, $croppedFG, 0, 0, 0, 0, $width, $height, $width, $height);
-
+  // Output the final image as PNG
   ob_start();
-  imagepng($out);
-  $image = ob_get_clean();
-  return $image;
+  imagepng($final);
+  $imageData = ob_get_clean();
+
+  return $imageData;
 }

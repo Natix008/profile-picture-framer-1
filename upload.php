@@ -30,6 +30,6 @@ if(isset($_FILES["image"])){
   file_put_contents($loc, $image);
   echo $loc;
 
-  imagedestroy($dest);
-  imagedestroy($src);
+  // imagedestroy($dest);
+  // imagedestroy($src);
 }
