@@ -6,13 +6,13 @@
   <title>Support Campaign</title>
 
   <!-- <link href="css/croppie.css" rel="stylesheet" /> -->
-  <link href="css/style.css" rel="stylesheet" />
+  <link href="css/style-2.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <!-- <script src="js/croppie.min.js"></script> -->
   <script src="js/fabric.min.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/app-2.js"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
           <canvas id="editor-canvas" width="720" height="720"></canvas>
 
           <img
-            src="frames/frame-0.png"
+            src="frames/frame-2.png"
             id="frame-overlay"
           />
 

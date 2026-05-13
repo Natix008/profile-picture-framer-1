@@ -250,23 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         /*
         |--------------------------------------------------------------------------
-        | AUTO DOWNLOAD IMAGE
-        |--------------------------------------------------------------------------
-        */
-
-        const link =
-          document.createElement('a');
-
-        link.download =
-          'campaign-profile.png';
-
-        link.href =
-          finalImage;
-
-        link.click();
-
-        /*
-        |--------------------------------------------------------------------------
         | FORM VALUES
         |--------------------------------------------------------------------------
         */
@@ -288,16 +271,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
         /*
         |--------------------------------------------------------------------------
-        | REDIRECT WITHOUT IMAGE
+        | SAVE IMAGE TEMPORARILY
         |--------------------------------------------------------------------------
         */
 
-        setTimeout(function(){
+        sessionStorage.setItem(
+          'campaignImage',
+          finalImage
+        );
 
-          window.location =
-            `download.php?name=${name}&role=${role}&testimony=${testimony}`;
+        /*
+        |--------------------------------------------------------------------------
+        | REDIRECT TO DOWNLOAD PAGE
+        |--------------------------------------------------------------------------
+        */
 
-        }, 500);
+        window.location =
+          `download.php?name=${name}&role=${role}&testimony=${testimony}`;
       };
     };
   };
